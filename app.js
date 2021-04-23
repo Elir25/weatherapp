@@ -3,17 +3,21 @@
 const APIkey = 'a8d7b80c35404e2394635a4dcc55471b';
 const baseURL = 'https://api.weatherbit.io/v2.0/current?';
 
+/*const latitude = 6.253130;
+const longitude = -75.571027;*/
 
+//5.to get the user actual position and react if it receives it or not 
 const getUserPosition = () => {
     console.log('from getUserForPosition');
+    //this is an specific method of the browser to find out the user location
     navigator.geolocation.getCurrentPosition((location) => onPositionReceived(location), (error) => onPositionDenied(error));
 }
 
 const onPositionReceived = (position) => {
     const { coords: { latitude, longitude } } = position;
-    callWeatherAPIWithCoords(latitude, longitude);
-};
-
+    callWeatherAPIUsingCoords(latitude, longitude);
+}
+//5.a method that shows a message if the position is denied
 const onPositionDenied = (error) => {
     const { message } = error;
     console.error(error);
@@ -25,28 +29,27 @@ const onPositionDenied = (error) => {
     p.innerText = message;
 
     notification.appendChild(p);
-};
-
-const callWeatherAPIWithCoords = (latitude, longitude) => {
-    const URL = `${baseURL}lat=${latitude}&lon=${longitude}&key=${APIkey}`;
-
-    const call = fetch(URL);
-    // if the call goes right || 200;
-    call.then((response) => response.json()).then((weatherInfo) => showWeatherInfo(weatherInfo.data[0]));
-    // if something goes wrong || 403, 404, 402...
-    call.catch((error) => console.error('Something went wrong', error));
 }
 
-const showWeatherInfo = (weatherObject) => {
-  console.log('weather Info Element', weatherObject);
+//4.the function that calls the API
+const callWeatherAPIUsingCoords = (latitude, longitude) => {
+    const URL = `${baseURL}lat=${latitude}&lon=${longitude}&key=${APIkey}`;
+    const apiCall = fetch(URL); //1. save it in a variable 
+    //2. if the call works out :)
+    apiCall.then((response) => response.json()).then((dataInfo) => showWeatherInfo(dataInfo.data[0]));
+    //3. if the call goes wrong :(
+    apiCall.catch((error) => console.error('Ooops, this is an error :(', error));
+}
 
-  // the icon, temperature value, temperature description, location (city, country)
-  const { 
-      city_name, 
-      country_code,
-      temp,
-      weather: { description, icon } 
-    } = weatherObject;
+//7.show the info of the wather in that city(the icon and description are inside the weather section of the object)
+const showWeatherInfo = (weatherObject) => {
+    console.log('weather info element', weatherObject);
+    const { 
+        city_name, 
+        country_code,
+        temp,
+        weather: { description, icon } 
+      } = weatherObject;
 
   const descriptionP =  document.querySelector('.temperature-description p');
   descriptionP.innerText = description;
@@ -61,6 +64,6 @@ const showWeatherInfo = (weatherObject) => {
   const iconWithoutTheFirstLetter = icon.slice(1);
   weatherIconImg.setAttribute('src', `icons/${iconWithoutTheFirstLetter}.png`);
 
-};
+}
 
-getUserPosition();
+getUserPosition();//we need to call the function at the end
