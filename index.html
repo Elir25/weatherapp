@@ -7,7 +7,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="current-city"></div>
+    <div class="current-city">
+        <div id="form-city-input">
+            <h4>Find a city here</h4>
+            <form id="">
+                    <label for="Name">City Name:</label><br>
+                    <input type="text" id="city-name" name="city-name" placeholder="name"><br>
+                    <label for="lat">Latitude:</label><br>
+                    <input type="text" id="lat" name="lat" placeholder="latitude"><br>
+                    <label for="age">Longitude:</label><br>
+                    <input type="text" id="lon" name="lon" placeholder="Longitude"><br>
+                    <input type="submit" value="submit" id="button">
+            </form>
+        </div>
+    </div>
     <!-- 
     <div class="container">
         <div class="app-title">
@@ -31,7 +44,7 @@
     </div>
      -->
      <div class="cities">
-
+        
      </div>
     <script src="app.js"></script>
 </body>
